@@ -4,7 +4,6 @@ public class LeeAlgorithm : IPathFindingAlgorithm
 {
     private bool[,] _visitedNodes;
 
-
     static readonly int[] RowNum = { -1, 0, 0, 1 };
     static readonly int[] ColNum = { 0, -1, 1, 0 };
 
@@ -22,37 +21,37 @@ public class LeeAlgorithm : IPathFindingAlgorithm
         Queue<QueueNode> nodeQueue = new();
         nodeQueue.Enqueue(new QueueNode(startPoint, 0, null!));
 
-        //Counter
-        int counter = 0;
-        
         while (nodeQueue.Count != 0)
         {
-            counter++;
             QueueNode current = nodeQueue.Dequeue();
             Coordinates coordinates = current.Coordinates;
 
             if (coordinates.X == destPoint.X && coordinates.Y == destPoint.Y)
             {
-                Console.WriteLine(counter);//Not needed
                 path = RestorePath(current);
                 return current.Distance;
             }
 
-            for (int i = 0; i < 4; i++)
-            {
-                Coordinates adjCoordinates =
-                    new Coordinates(coordinates.X + RowNum[i], coordinates.Y + ColNum[i]);
-                if (CheckValid(adjCoordinates, maze) && maze[adjCoordinates] == 1 &&
-                    !_visitedNodes[adjCoordinates.X, adjCoordinates.Y])
-                {
-                    _visitedNodes[adjCoordinates.X, adjCoordinates.Y] = true;
-
-                    nodeQueue.Enqueue(new QueueNode(adjCoordinates, current.Distance + 1, current));
-                }
-            }
+            AddAdjNodesToQueue(nodeQueue,current,maze);
         }
 
         return -1;
+    }
+    
+    private void AddAdjNodesToQueue(Queue<QueueNode> nodeQueue, QueueNode current, Maze maze)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            Coordinates adjCoordinates =
+                new Coordinates(current.Coordinates.X + RowNum[i], current.Coordinates.Y + ColNum[i]);
+            if (CheckValid(adjCoordinates, maze) && maze[adjCoordinates] == 1 &&
+                !_visitedNodes[adjCoordinates.X, adjCoordinates.Y])
+            {
+                _visitedNodes[adjCoordinates.X, adjCoordinates.Y] = true;
+
+                nodeQueue.Enqueue(new QueueNode(adjCoordinates, current.Distance + 1, current));
+            }
+        }
     }
 
     private bool CheckValid(Coordinates coordinates, Maze currMaze)
