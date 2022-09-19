@@ -22,13 +22,18 @@ public class LeeAlgorithm : IPathFindingAlgorithm
         Queue<QueueNode> nodeQueue = new();
         nodeQueue.Enqueue(new QueueNode(startPoint, 0, null!));
 
+        //Counter
+        int counter = 0;
+        
         while (nodeQueue.Count != 0)
         {
+            counter++;
             QueueNode current = nodeQueue.Dequeue();
             Coordinates coordinates = current.Coordinates;
 
             if (coordinates.X == destPoint.X && coordinates.Y == destPoint.Y)
             {
+                Console.WriteLine(counter);//Not needed
                 path = RestorePath(current);
                 return current.Distance;
             }
@@ -62,7 +67,7 @@ public class LeeAlgorithm : IPathFindingAlgorithm
 
         var curNode = currentNode;
         path.Add(curNode.Coordinates);
-        
+
         while (curNode.Distance != 0)
         {
             curNode = curNode.PreviousNode;
@@ -72,18 +77,18 @@ public class LeeAlgorithm : IPathFindingAlgorithm
         path.Reverse();
         return path;
     }
+}
 
-    private class QueueNode
+public class QueueNode
+{
+    public QueueNode PreviousNode { get; }
+    public Coordinates Coordinates { get; }
+    public int Distance { get; }
+
+    public QueueNode(Coordinates coordinates, int distance, QueueNode previousNode)
     {
-        public QueueNode PreviousNode { get; }
-        public Coordinates Coordinates { get; }
-        public int Distance { get; }
-
-        public QueueNode(Coordinates coordinates, int distance, QueueNode previousNode)
-        {
-            Coordinates = coordinates;
-            Distance = distance;
-            PreviousNode = previousNode;
-        }
+        Coordinates = coordinates;
+        Distance = distance;
+        PreviousNode = previousNode;
     }
 }
