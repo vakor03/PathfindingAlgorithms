@@ -1,26 +1,35 @@
 ﻿namespace Vakor.PathfindingAlgorithms.Algorithms;
 
-public class Maze
+public class Labyrinth
 {
     private int[,] _matrix;
 
     public int this[int x, int y] => _matrix[x, y];
-    public int this[Coordinates coordinates] => _matrix[coordinates.X, coordinates.Y];
+    public int this[Cell cell] => _matrix[cell.X, cell.Y];
 
     public int Height => _matrix.GetLength(0);
     public int Width => _matrix.GetLength(1);
 
-    private Maze(int[,] matrix)
+    
+
+    private Labyrinth(int[,] matrix)
     {
         _matrix = matrix;
     }
 
-    public static Maze GenerateDefaultMaze() => new Maze(new[,]
+    public static Labyrinth GenerateDefaultMaze() => new(new[,]
     {
         { 1, 1, 1, 1, 1, 1, 1 },
         { 1, 1, 1, 0, 1, 1, 1 },
         { 1, 1, 1, 0, 1, 1, 1 },
         { 1, 1, 1, 0, 1, 1, 1 },
         { 1, 1, 1, 1, 1, 1, 1 },
+        
+        
+        // { 1, 0, 1, 1, 1, 0, 1 },
+        // { 1, 0, 1, 0, 1, 0, 1 },
+        // { 1, 0, 1, 0, 1, 0, 1 },
+        // { 1, 0, 1, 0, 1, 0, 1 },
+        // { 1, 1, 1, 0, 1, 1, 1 },
     });
 }
